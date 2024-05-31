@@ -1,42 +1,30 @@
 import tkinter as tk
 from tkinter import messagebox
-import random
+from random import randint, choice, shuffle
 
 DEFAULT_EMAIL = "yarfik@gmail.com"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-           'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-           'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+def generate_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+               'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-nr_letters = random.randint(8, 10)
-nr_symbols = random.randint(2, 4)
-nr_numbers = random.randint(2, 4)
+    password_list = []
 
-password_list = []
+    password_list.extend([choice(letters) for _ in range(randint(8, 10))])
+    password_list.extend([choice(symbols) for _ in range(randint(2, 4))])
+    password_list.extend([choice(numbers) for _ in range(randint(2, 4))])
 
-[new_item for item in letters]
-for char in range(nr_letters):
-    password_list.append(random.choice(letters))
-
-for char in range(nr_symbols):
-    password_list += random.choice(symbols)
-
-for char in range(nr_numbers):
-    password_list += random.choice(numbers)
-
-random.shuffle(password_list)
-
-password = ""
-for char in password_list:
-    password += char
-
-print(f"Your password is: {password}")
-
+    shuffle(password_list)
+    password = "".join(password_list)
+    input_password.delete(0, tk.END)
+    input_password.insert(0, password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
 
 def save():
     website = input_website.get()
@@ -88,7 +76,7 @@ input_email.insert(tk.END, string="yarfik@gmail.com")
 
 input_password = tk.Entry(width=32, relief="solid")
 input_password.grid(row=3, column=1, sticky="W", columnspan=2)
-btn_generate = tk.Button(text="Generate password")
+btn_generate = tk.Button(text="Generate password", command=generate_password)
 btn_generate.grid(row=3, column=2, sticky="W")
 
 btn_add = tk.Button(text="Add", width=43, command=save)
