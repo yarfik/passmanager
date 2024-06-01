@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import messagebox
 from random import randint, choice, shuffle
+import pyperclip
 
 DEFAULT_EMAIL = "yarfik@gmail.com"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+
 def generate_password():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
                'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
@@ -20,6 +23,7 @@ def generate_password():
 
     shuffle(password_list)
     password = "".join(password_list)
+    pyperclip.copy(password)
     input_password.delete(0, tk.END)
     input_password.insert(0, password)
 
