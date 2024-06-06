@@ -1,7 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 from random import randint, choice, shuffle
+from typing import Dict, Any
+
 import pyperclip
+import json
 
 DEFAULT_EMAIL = "yarfik@gmail.com"
 
@@ -34,6 +37,12 @@ def save():
     website = input_website.get()
     email = input_email.get()
     pwd = input_password.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": pwd,
+        }
+    }
 
     is_valid = len(website) > 0 and len(email) > 0 and len(pwd) > 0
     if not is_valid:
@@ -43,8 +52,19 @@ def save():
                                                               f"\nPassword: {pwd} \nIs it ok to save?")
 
         if is_ok:
-            with open("data.txt", "a") as file_data:
-                file_data.write(f"{website} | {email} | {pwd}\n")
+            try:
+                with open("data.json", "r") as file_data:
+                    # read old data
+                    data = json.load(file_data)
+                    # updating
+                    data.update(new_data)
+            except FileNotFoundError:
+                data = new_data
+
+            with open('data.json', 'w') as file_data:
+                # saving
+                json.dump(data, file_data, indent=4)
+
                 input_website.delete(0, 'end')
                 input_email.delete(0, 'end')
                 input_email.insert(0, string=DEFAULT_EMAIL)
