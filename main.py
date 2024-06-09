@@ -7,6 +7,30 @@ import pyperclip
 import json
 
 DEFAULT_EMAIL = "yarfik@gmail.com"
+FILE_NAME = "data.json"
+
+# ------------------------------ SEARCH PASSWORD -------------------------------- #
+
+
+def find_password():
+    try:
+        with open(FILE_NAME, "r") as file_data:
+            # read old data
+            data = json.load(file_data)
+
+            website = input_website.get()
+            if len(website) == 0:
+                messagebox.showerror(title="Oops", message="Website name cannot be empty!")
+            else:
+                try:
+                    info = data[website]
+                    messagebox.showinfo(title=website, message=f"email: {info['email']} \npassword: {info['password']}")
+                except KeyError:
+                    messagebox.showerror(title="Not Found", message="No details for the website exists!")
+
+    except FileNotFoundError:
+        messagebox.showerror("No Data File Found!")
+
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -53,7 +77,7 @@ def save():
 
         if is_ok:
             try:
-                with open("data.json", "r") as file_data:
+                with open(FILE_NAME, "r") as file_data:
                     # read old data
                     data = json.load(file_data)
                     # updating
@@ -61,7 +85,7 @@ def save():
             except FileNotFoundError:
                 data = new_data
 
-            with open('data.json', 'w') as file_data:
+            with open(FILE_NAME, 'w') as file_data:
                 # saving
                 json.dump(data, file_data, indent=4)
 
@@ -90,9 +114,11 @@ lbl_email.grid(row=2, column=0)
 lbl_password = tk.Label(text="Password: ", bg="white")
 lbl_password.grid(row=3, column=0)
 
-input_website = tk.Entry(width=51, relief="solid")
-input_website.grid(row=1, column=1, columnspan=2, sticky="W")
+input_website = tk.Entry(width=32, relief="solid")
+input_website.grid(row=1, column=1, sticky="W")
 input_website.focus()
+btn_search = tk.Button(text="Search", command=find_password, width=14)
+btn_search.grid(row=1, column=2)
 
 input_email = tk.Entry(width=51, relief="solid")
 input_email.grid(row=2, column=1, columnspan=2, sticky="W")
